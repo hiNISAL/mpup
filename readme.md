@@ -6,17 +6,6 @@
 
 利用[小程序开发者工具命令行工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/cli.html)提供的能力实现。
 
-小程序开发者工具提供的命令行工具所在路径：
-
-```bash
-macOS: <安装路径>/Contents/MacOS/cli
-
-Windows: <安装路径>/cli.bat
-```
-
-通常 macOS 下命令行工具的默认目录是 `/Applications/wechatwebdevtools.app/Contents/MacOS`。
-windows 下命令行工具的默认陌路是 `C:\\Program Files (x86)\\Tencent\\微信web开发者工具`。
-
 此工具适合小程序代码上传前需要许多前置工作的项目，如需要编译、修改环境配置、跑钩子等。
 
 ## 安装
@@ -29,6 +18,17 @@ npm install mpup -g
 ```
 
 ## 使用
+
+> 命令行工具目录
+>
+> ```bash
+> macOS: <安装路径>/Contents/MacOS/cli
+> Windows: <安装路径>/cli.bat
+> ```
+>
+> 通常 macOS 下命令行工具的默认目录是 `/Applications/wechatwebdevtools.app/Contents/MacOS`。
+>
+> windows 下命令行工具的默认目录是 `C:\\Program Files (x86)\\Tencent\\微信web开发者工具`。
 
 ```bash
 npx mpup --project=项目路径 --mptool=小程序命令行工具所在路径 --ver=上传代码的版本号
