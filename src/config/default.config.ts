@@ -15,6 +15,12 @@ export default class DefaultConfig implements iConfig {
   // 每次上传前询问版本和描述
   ask: boolean = true;
 
+  /** 每次询问版本号的提示文案 */
+  askVersionText: string = '版本号';
+
+  /** 每次询问版本描述的提示文案 */
+  askDescText: string = '版本描述';
+
   // 默认输出命令结果
   stdout: boolean = false;
 

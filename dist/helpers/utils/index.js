@@ -3,13 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.asyncFn = exports.execCmd = exports.relativePath = exports.writeFileSync = exports.readFileSync = exports.resolvePath = exports.isAsyncFn = exports.isMacOS = void 0;
+exports.scanf = exports.asyncFn = exports.execCmd = exports.relativePath = exports.writeFileSync = exports.readFileSync = exports.resolvePath = exports.isAsyncFn = exports.isMacOS = void 0;
 
 var _path = _interopRequireDefault(require("path"));
 
 var _fs = _interopRequireDefault(require("fs"));
 
 var _child_process = require("child_process");
+
+var _inquirer = _interopRequireDefault(require("inquirer"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -87,3 +89,16 @@ const asyncFn = (fn, ...args) => {
 };
 
 exports.asyncFn = asyncFn;
+
+const scanf = async tip => {
+  const {
+    value
+  } = await _inquirer.default.prompt([{
+    name: 'value',
+    type: 'input',
+    message: tip.green
+  }]);
+  return value;
+};
+
+exports.scanf = scanf;

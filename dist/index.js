@@ -19,8 +19,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const {
   mpToolPath,
   projectPath,
-  desc,
-  ver,
   beforeExecAllCmd,
   afterExecAllCmd,
   commands,
@@ -29,13 +27,29 @@ const {
   beforeUpload,
   uploadingText,
   outResult,
-  done
+  done,
+  askVersionText = '',
+  askDescText = ''
+} = _index.default;
+let {
+  desc,
+  ver
 } = _index.default;
 
 (async () => {
   if (_args.default._[0] === 'init') {
     (0, _init.default)();
     return;
+  }
+
+  if (_index.default.ask) {
+    if (!ver) {
+      ver = await (0, _utils.scanf)(askVersionText);
+    }
+
+    if (!desc) {
+      desc = await (0, _utils.scanf)(askDescText);
+    }
   } // 判断 mpToolPath 配置项
 
 
@@ -81,6 +95,8 @@ const {
   }
 
   await (0, _utils.asyncFn)(afterExecAllCmd);
+  console.log(ver, desc);
+  return;
   const uploadCmd = `${(0, _utils.isMacOS)() ? './' : ''}cli${(0, _utils.isMacOS)() ? '' : '.bat'} upload --project=${projectPath} --version=${ver} --desc=${desc}`; // 上传前
 
   await (0, _utils.asyncFn)(beforeUpload, uploadCmd, projectPath, mpToolPath); // loading

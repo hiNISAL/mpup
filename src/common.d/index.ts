@@ -24,6 +24,12 @@ export interface iConfig {
   /** 每次上传前询问版本和版本描述 */
   ask?: boolean;
 
+  /** 每次询问版本号的提示文案 */
+  askVersionText?: string;
+
+  /** 每次询问版本描述的提示文案 */
+  askDescText?: string;
+
   /** 本次上传的代码的描述 */
   desc?: string,
 

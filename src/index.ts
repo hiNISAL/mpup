@@ -1,7 +1,7 @@
 import config from './helpers/get-config/index';
 import args from './args';
 import { MissingOption } from './throw/index';
-import { isMacOS, asyncFn, execCmd } from './helpers/utils';
+import { isMacOS, asyncFn, execCmd, scanf } from './helpers/utils';
 import init from './apps/init';
 import ora from 'ora';
 import 'colors';
@@ -9,8 +9,6 @@ import 'colors';
 const { 
   mpToolPath,
   projectPath,
-  desc,
-  ver,
   beforeExecAllCmd,
   afterExecAllCmd,
   commands,
@@ -20,12 +18,28 @@ const {
   uploadingText,
   outResult,
   done,
+  askVersionText = '',
+  askDescText = '',
+} = config;
+
+let {
+  desc,
+  ver,
 } = config;
 
 (async () => {
   if (args._[0] === 'init') {
     init();
     return;
+  }
+
+  if (config.ask) {
+    if (!ver) {
+      ver = await scanf(askVersionText);
+    }
+    if (!desc) {
+      desc = await scanf(askDescText);
+    }
   }
 
   // 判断 mpToolPath 配置项

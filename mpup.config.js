@@ -11,6 +11,8 @@ module.exports = {
   // 本次要上传的代码描述
   desc: '',
 
+  ask: false,
+
   // 执行命令的路径
   execPath: '',
 

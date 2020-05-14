@@ -16,7 +16,13 @@ class DefaultConfig {
 
     this.ver = ''; // 每次上传前询问版本和描述
 
-    this.ask = true; // 默认输出命令结果
+    this.ask = true;
+    /** 每次询问版本号的提示文案 */
+
+    this.askVersionText = '版本号';
+    /** 每次询问版本描述的提示文案 */
+
+    this.askDescText = '版本描述'; // 默认输出命令结果
 
     this.stdout = false;
     this.uploadingText = '小程序代码上传中...'; // 执行命令的路径

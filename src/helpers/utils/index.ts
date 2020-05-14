@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { exec } from 'child_process';
+import inquirer from 'inquirer';
 
 export const isMacOS = () => {
   return !(/^win/.test(process.platform));
@@ -56,4 +57,16 @@ export const asyncFn = (fn: Function, ...args: any) => {
       reject(e);
     }
   });
+};
+
+export const scanf = async(tip: string) => {
+  const { value } = await inquirer.prompt([
+    {
+      name: 'value',
+      type: 'input',
+      message: tip.green,
+    },
+  ]);
+
+  return value;
 };
