@@ -31,11 +31,11 @@ export const execCmd = (cmd: string, path: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     try {
       exec(cmd, { cwd: path }, (err, stdout, stderr) => {
-        if (err || stderr) {
-          reject(err);
+        if (stdout) {
+          resolve(stdout);
           return;
         }
-        resolve(stdout);
+        reject(err || stderr);
       });
     } catch (e) {
       reject(e);
