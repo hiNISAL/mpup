@@ -101,6 +101,7 @@ try {
     try {
       uploadOut = await execCmd(uploadCmd, mpToolPath!);
     } catch (e) {
+      console.error(e);
       throw Error(e);
     }
   
