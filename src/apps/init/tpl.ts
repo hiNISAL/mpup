@@ -5,20 +5,15 @@ export default (
 return `module.exports = {
   /** 微信开发者工具安装路径 */
   mpToolPath: '${toolPath}',
+
   /** 项目路径 */
   projectPath: '${projectPath}',
 
-  /** 上传版本 */
+  /** 本次要上传的代码版本号 */
   // ver: '',
 
-  /** 上传版本描述 */
+  /** 本次要上传的代码描述 */
   // desc: '',
-
-  /** 执行命令的路径 */
-  // execPath: '',
-
-  /** 默认输出命令的结果 */
-  // stdout: true,
 
   /** 每次上传前询问版本和描述 */
   // ask: true,
@@ -29,48 +24,50 @@ return `module.exports = {
   /** 每次询问版本描述的提示文案 */
   // askDescText: '版本描述',
 
-  /** loading 中的提示文案 */
-  // uploadingText: '上传中...',
+  /** 执行命令的路径 */
+  // execPath: '',
+
+  /** 默认输出命令的结果 */
+  // stdout: false,
+
+  /** 上传中的 loading 文案 */
+  // uploadingText: '',
 
   /** 上传前执行的命令列表 */
   /**
   commands: [
     {
+      // 出错做的事
+      async error({e, command, abort}) {},
       // 命令执行前做的事情
-      async before() {
-        console.log(1);
-      },
-      /** 出错时做的事情 */
-      async error() { },
+      async before({config, command, abort}) {},
       // 命令执行后做的事情
-      async after(stdout) {
-        // console.log(stdout);
-      },
+      async after({ abort, command, stdout }) {},
       // 命令
-      cmd: 'pwd',
-      // 执行命令的路径
+      cmd: '',
+      // 执行命令的路径 优先级比上一层的 execPath 高
       execPath: '',
     },
   ],
-  * /
-
-  /** 出错时做的事情 */
-  // async error() { },
+  */
 
   /** 所有命令执行完前 */
-  // async beforeExecAllCmd() { },
+  // async beforeExecAllCmd({ config, abort }) {},
 
   /** 所有命令执行完后 */
-  // async afterExecAllCmd() { },
+  // async afterExecAllCmd({ config, abort }) {},
 
   /** 上传前 */
-  // async beforeUpload(cmd, projectPath, mpToolPath) {},
+  // async beforeUpload({ uploadCmd, config, abort }) {},
 
   /** 上传完毕 */
-  // async done(stdout) {},
+  // async done({ stdout, config, abort }) {},
 
-  /** 自动输出上传结果 */
-  outResult: true,
+  /** 出错时做的事情 如果时在执行命令列表中的命令过程中出错 会提供 errorTarget 和 command */
+  // async error({ e, abort, errorTarget, command }) {},
+
+  /** 自动输出结果 */
+  // outResult: true,
 };
 `
 };
