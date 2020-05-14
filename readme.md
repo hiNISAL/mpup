@@ -29,6 +29,11 @@ npm install mpup -g
 npx mpup --project=项目路径 --mptool=小程序命令行工具所在路径 --ver=上传代码的版本号
 ```
 
+## 必要的前置工作
+
+1. 打开小程序的服务端口，(小程序开发者工具 => 设置 => 安全设置 => 开启服务端口)
+2. 使用较新稳定版的开发者工具，测试中发现老的稳定版本、 RC 版本和 Nightly Build 版本的命令行工具可能无法运行
+
 ## 配置文件
 
 ### 生成配置文件
@@ -114,4 +119,25 @@ module.exports = {
   ],
   // ...
 }
+```
+
+## 多个小程序上传代码
+
+暂时不支持，可以写脚本批量调用工具。
+
+命令行工具支持 `project` 参数，其他配置可以共用一个配置文件。
+
+```js
+// 示例代码
+const { execSync } = require('child_process');
+
+const projects = [
+  '项目1',
+  '项目2',
+  '项目3',
+];
+
+projects.forEach((project) => {
+  execSync(`mpup --config=配置路径 --project=${project}`);
+});
 ```
