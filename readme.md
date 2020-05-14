@@ -2,6 +2,8 @@
 
 微信小程序代码上传辅助工具，可处理前置操作，实现自动化上传工作流，理论支持任何微信小程序项目。
 
+<center><img src="https://raw.githubusercontent.com/hiNISAL/mpup/master/doc-assets/images/cover.gif" style="max-width: 600px"></center>
+
 利用[小程序开发者工具命令行工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/cli.html)提供的能力实现。
 
 小程序开发者工具提供的命令行工具所在路径：
