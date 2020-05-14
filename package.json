@@ -1,0 +1,58 @@
+{
+  "name": "mpup",
+  "version": "1.1.1",
+  "description": "微信小程序代码上传辅助工具",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "webpack --progress --env.development --env.nodemon --config ./build/webpack.config.js",
+    "build": "gulp",
+    "dev": "gulp --listen=1",
+    "listen": "nodemon ./dist/index.js -- --config=./mpup.config.js --desc=123 --ver=2.1.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hiNISAL/mpup.git"
+  },
+  "keywords": [
+    "微信小程序",
+    "小程序",
+    "代码上传",
+    "自动上传代码"
+  ],
+  "author": "NISAL",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hiNISAL/mpup/issues"
+  },
+  "homepage": "https://github.com/hiNISAL/mpup#readme",
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@types/colors": "^1.2.1",
+    "@types/inquirer": "^6.5.0",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^10.17.21",
+    "@types/yargs": "^15.0.4",
+    "babel-loader": "^8.1.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "jest": "^26.0.1",
+    "nodemon": "^2.0.3",
+    "nodemon-webpack-plugin": "^4.3.1",
+    "ts-loader": "^7.0.3",
+    "typescript": "^3.8.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "inquirer": "^7.1.0",
+    "ora": "^4.0.4",
+    "yargs": "^15.3.1"
+  },
+  "bin": {
+    "mpup": "./bin/mpup"
+  }
+}
