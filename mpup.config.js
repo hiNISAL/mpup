@@ -1,9 +1,9 @@
 module.exports = {
   // 微信开发者工具安装路径
-  mpToolPath: '',
+  mpToolPath: '/Applications/wechatwebdevtools.app/Contents/MacOS',
 
   // 项目路径
-  projectPath: '',
+  projectPath: '/Users/nisalhi/Documents/studio/project/private/yv-mp/dist/build/mp-weixin',
 
   // 本次要上传的代码版本号
   ver: '',
@@ -11,7 +11,7 @@ module.exports = {
   // 本次要上传的代码描述
   desc: '',
 
-  ask: false,
+  ask: true,
 
   // 执行命令的路径
   execPath: '',

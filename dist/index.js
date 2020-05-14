@@ -95,8 +95,6 @@ let {
   }
 
   await (0, _utils.asyncFn)(afterExecAllCmd);
-  console.log(ver, desc);
-  return;
   const uploadCmd = `${(0, _utils.isMacOS)() ? './' : ''}cli${(0, _utils.isMacOS)() ? '' : '.bat'} upload --project=${projectPath} --version=${ver} --desc=${desc}`; // 上传前
 
   await (0, _utils.asyncFn)(beforeUpload, uploadCmd, projectPath, mpToolPath); // loading
