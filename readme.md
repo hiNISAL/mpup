@@ -1,6 +1,6 @@
 # mpup
 
-微信小程序代码上传辅助工具。
+微信小程序代码上传辅助工具，实现自动化上传代码，可处理前置操作，理论支持任何微信小程序项目。
 
 利用[小程序开发者工具命令行工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/cli.html)提供的能力实现。
 
