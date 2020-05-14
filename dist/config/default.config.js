@@ -39,7 +39,10 @@ class DefaultConfig {
     this.remote = ''; // 是否启用服务端上传
 
     this.useServerUpload = false;
-  } // 所有命令执行完前
+  } // 出错
+
+
+  async error() {} // 所有命令执行完前
 
 
   async beforeExecAllCmd() {}

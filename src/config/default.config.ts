@@ -32,6 +32,9 @@ export default class DefaultConfig implements iConfig {
   // 上传前执行的命令列表
   commands: iCommand[] = [];
 
+  // 出错
+  async error() {}
+
   // 所有命令执行完前
   async beforeExecAllCmd() {};
 

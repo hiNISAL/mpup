@@ -3,6 +3,8 @@ export interface iCommand {
   before?: Function;
   // 命令执行后做的事情
   after?: Function;
+  // 出错的时候做的事情
+  error?: Function;
   // 命令
   cmd?: string;
   // 执行命令的路径
@@ -56,6 +58,9 @@ export interface iConfig {
 
   /** 上传完毕 */
   done?: Function;
+
+  /** 出错时 */
+  error?: Function;
 
   /** 自动输出上传结果 */
   outResult?: boolean;

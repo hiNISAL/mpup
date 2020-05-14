@@ -44,6 +44,8 @@ var _default = (toolPath = '', projectPath = '') => {
       async before() {
         console.log(1);
       },
+      /** 出错时做的事情 */
+      async error() { },
       // 命令执行后做的事情
       async after(stdout) {
         // console.log(stdout);
@@ -55,6 +57,9 @@ var _default = (toolPath = '', projectPath = '') => {
     },
   ],
   * /
+
+  /** 出错时做的事情 */
+  // async error() { },
 
   /** 所有命令执行完前 */
   // async beforeExecAllCmd() { },

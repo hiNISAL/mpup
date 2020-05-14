@@ -20,12 +20,20 @@ const {
   done,
   askVersionText = '',
   askDescText = '',
+  error: globalError,
 } = config;
 
 let {
   desc,
   ver,
 } = config;
+
+const abort = (text = '') => {
+  console.log(text);
+  process.exit();
+};
+
+const spinner = ora(uploadingText);
 
 try {
   (async () => {
@@ -37,9 +45,11 @@ try {
     if (config.ask) {
       if (!ver) {
         ver = await scanf(askVersionText);
+        config.ver = ver;
       }
       if (!desc) {
         desc = await scanf(askDescText);
+        config.desc = desc;
       }
     }
   
@@ -54,13 +64,17 @@ try {
     }
   
     // 跑所有命令前的钩子
-    await asyncFn(beforeExecAllCmd!, config);
+    await asyncFn(beforeExecAllCmd!, {
+      config,
+      abort,
+    });
   
     // 执行所有命令
     for (let i = 0, len = commands!.length; i < len; i++) {
       const {
         before = () => {},
         after = () => {},
+        error = () => {},
         cmd,
         execPath = globalExecPath,
         stdout: needOut = globalStdout,
@@ -68,11 +82,30 @@ try {
   
       try {
         // 执行命令前的钩子
-        await asyncFn(before);
+        await asyncFn(before, {
+          config,
+          command: commands![i],
+          abort,
+        });
   
         let stdout = undefined;
         if (cmd) {
-          stdout = await execCmd(cmd!, execPath);
+          try {
+            stdout = await execCmd(cmd!, execPath);
+          } catch (e) {
+            await asyncFn(error), {
+              e,
+              abort,
+              command: commands![i],
+            };
+
+            await asyncFn(globalError!, {
+              e,
+              abort,
+              errorTarget: 'cmd',
+              command: commands![i],
+            })
+          }
         }
   
         if (needOut) {
@@ -80,21 +113,36 @@ try {
         }
   
         // 执行命令后的钩子
-        await asyncFn(after, stdout);
+        await asyncFn(after, {
+          stdout,
+          command: commands![i],
+          abort,
+        });
       } catch (e) {
+        asyncFn(globalError!, {
+          e,
+          abort,
+        });
         throw Error(e);
       }
     }
   
-    await asyncFn(afterExecAllCmd!);
+    await asyncFn(afterExecAllCmd!, {
+      config,
+      abort,
+    });
   
     const uploadCmd = `${isMacOS() ? './' : ''}cli${isMacOS() ? '' : '.bat'} upload --project=${projectPath} --version=${ver} --desc=${desc}`;
   
     // 上传前
-    await asyncFn(beforeUpload!, uploadCmd, projectPath, mpToolPath);
+    await asyncFn(beforeUpload!, {
+      uploadCmd,
+      config,
+      abort,
+    });
   
     // loading
-    const spinner = ora(uploadingText).start();
+    spinner.start();
   
     // 执行上传
     let uploadOut = '';
@@ -102,7 +150,13 @@ try {
       uploadOut = await execCmd(uploadCmd, mpToolPath!);
     } catch (e) {
       console.error(e);
-      throw Error(e);
+      spinner.stop();
+      await asyncFn(globalError!, {
+        e,
+        abort,
+      });
+      console.log('检查小程序路径、项目路径是否正确'.red);
+      return;
     }
   
     // 停止 loading
@@ -114,12 +168,22 @@ try {
         console.error(uploadOut.red);
       } else {
         console.log(uploadOut.green);
+        spinner.stop();
       }
     }
   
     // 上传完毕钩子
-    await asyncFn(done!, uploadOut);
+    await asyncFn(done!, {
+      stdout: uploadOut,
+      config,
+      abort,
+    });
   })()
 } catch (e) {
   console.error(e);
+  asyncFn(globalError!, {
+    e,
+    abort,
+  });
+  spinner.stop();
 }

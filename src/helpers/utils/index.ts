@@ -29,13 +29,17 @@ export const relativePath = (p1: string, p2: string) => {
 
 export const execCmd = (cmd: string, path: string): Promise<string> => {
   return new Promise((resolve, reject) => {
-    exec(cmd, { cwd: path }, (err, stdout, stderr) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(stdout);
-    });
+    try {
+      exec(cmd, { cwd: path }, (err, stdout, stderr) => {
+        if (err || stderr) {
+          reject(err);
+          return;
+        }
+        resolve(stdout);
+      });
+    } catch (e) {
+      reject(e);
+    }
   });
 };
 

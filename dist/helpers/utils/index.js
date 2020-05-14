@@ -53,16 +53,20 @@ exports.relativePath = relativePath;
 
 const execCmd = (cmd, path) => {
   return new Promise((resolve, reject) => {
-    (0, _child_process.exec)(cmd, {
-      cwd: path
-    }, (err, stdout, stderr) => {
-      if (err) {
-        reject(err);
-        return;
-      }
+    try {
+      (0, _child_process.exec)(cmd, {
+        cwd: path
+      }, (err, stdout, stderr) => {
+        if (err || stderr) {
+          reject(err);
+          return;
+        }
 
-      resolve(stdout);
-    });
+        resolve(stdout);
+      });
+    } catch (e) {
+      reject(e);
+    }
   });
 };
 
