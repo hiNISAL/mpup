@@ -57,12 +57,12 @@ const execCmd = (cmd, path) => {
       (0, _child_process.exec)(cmd, {
         cwd: path
       }, (err, stdout, stderr) => {
-        if (err || stderr) {
-          reject(err);
+        if (stdout) {
+          resolve(stdout);
           return;
         }
 
-        resolve(stdout);
+        reject(err || stderr);
       });
     } catch (e) {
       reject(e);
