@@ -25,13 +25,13 @@ var _default = (toolPath = '', projectPath = '') => {
   // stdout: true,
 
   /** 每次上传前询问版本和描述 */
-  // ask: true;
+  // ask: true,
 
   /** 每次询问版本号的提示文案 */
-  // askVersionText: '版本号';
+  // askVersionText: '版本号',
 
   /** 每次询问版本描述的提示文案 */
-  // askDescText: '版本描述';
+  // askDescText: '版本描述',
 
   /** loading 中的提示文案 */
   // uploadingText: '上传中...',

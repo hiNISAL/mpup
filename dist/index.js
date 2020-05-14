@@ -36,90 +36,95 @@ let {
   ver
 } = _index.default;
 
-(async () => {
-  if (_args.default._[0] === 'init') {
-    (0, _init.default)();
-    return;
-  }
-
-  if (_index.default.ask) {
-    if (!ver) {
-      ver = await (0, _utils.scanf)(askVersionText);
+try {
+  (async () => {
+    if (_args.default._[0] === 'init') {
+      (0, _init.default)();
+      return;
     }
 
-    if (!desc) {
-      desc = await (0, _utils.scanf)(askDescText);
-    }
-  } // 判断 mpToolPath 配置项
-
-
-  if (!mpToolPath) {
-    (0, _index2.MissingOption)('mpToolPath');
-  } // 判断 projectPath 配置项
-
-
-  if (!projectPath) {
-    (0, _index2.MissingOption)('projectPath');
-  } // 跑所有命令前的钩子
-
-
-  await (0, _utils.asyncFn)(beforeExecAllCmd, _index.default); // 执行所有命令
-
-  for (let i = 0, len = commands.length; i < len; i++) {
-    const {
-      before = () => {},
-      after = () => {},
-      cmd,
-      execPath = globalExecPath,
-      stdout: needOut = globalStdout
-    } = commands[i];
-
-    try {
-      // 执行命令前的钩子
-      await (0, _utils.asyncFn)(before);
-      let stdout = undefined;
-
-      if (cmd) {
-        stdout = await (0, _utils.execCmd)(cmd, execPath);
+    if (_index.default.ask) {
+      if (!ver) {
+        ver = await (0, _utils.scanf)(askVersionText);
       }
 
-      if (needOut) {
-        console.log(stdout);
-      } // 执行命令后的钩子
+      if (!desc) {
+        desc = await (0, _utils.scanf)(askDescText);
+      }
+    } // 判断 mpToolPath 配置项
 
 
-      await (0, _utils.asyncFn)(after, stdout);
+    if (!mpToolPath) {
+      (0, _index2.MissingOption)('mpToolPath');
+    } // 判断 projectPath 配置项
+
+
+    if (!projectPath) {
+      (0, _index2.MissingOption)('projectPath');
+    } // 跑所有命令前的钩子
+
+
+    await (0, _utils.asyncFn)(beforeExecAllCmd, _index.default); // 执行所有命令
+
+    for (let i = 0, len = commands.length; i < len; i++) {
+      const {
+        before = () => {},
+        after = () => {},
+        cmd,
+        execPath = globalExecPath,
+        stdout: needOut = globalStdout
+      } = commands[i];
+
+      try {
+        // 执行命令前的钩子
+        await (0, _utils.asyncFn)(before);
+        let stdout = undefined;
+
+        if (cmd) {
+          stdout = await (0, _utils.execCmd)(cmd, execPath);
+        }
+
+        if (needOut) {
+          console.log(stdout);
+        } // 执行命令后的钩子
+
+
+        await (0, _utils.asyncFn)(after, stdout);
+      } catch (e) {
+        throw Error(e);
+      }
+    }
+
+    await (0, _utils.asyncFn)(afterExecAllCmd);
+    const uploadCmd = `${(0, _utils.isMacOS)() ? './' : ''}cli${(0, _utils.isMacOS)() ? '' : '.bat'} upload --project=${projectPath} --version=${ver} --desc=${desc}`; // 上传前
+
+    await (0, _utils.asyncFn)(beforeUpload, uploadCmd, projectPath, mpToolPath); // loading
+
+    const spinner = (0, _ora.default)(uploadingText).start(); // 执行上传
+
+    let uploadOut = '';
+
+    try {
+      uploadOut = await (0, _utils.execCmd)(uploadCmd, mpToolPath);
     } catch (e) {
+      console.error(e);
       throw Error(e);
-    }
-  }
-
-  await (0, _utils.asyncFn)(afterExecAllCmd);
-  const uploadCmd = `${(0, _utils.isMacOS)() ? './' : ''}cli${(0, _utils.isMacOS)() ? '' : '.bat'} upload --project=${projectPath} --version=${ver} --desc=${desc}`; // 上传前
-
-  await (0, _utils.asyncFn)(beforeUpload, uploadCmd, projectPath, mpToolPath); // loading
-
-  const spinner = (0, _ora.default)(uploadingText).start(); // 执行上传
-
-  let uploadOut = '';
-
-  try {
-    uploadOut = await (0, _utils.execCmd)(uploadCmd, mpToolPath);
-  } catch (e) {
-    throw Error(e);
-  } // 停止 loading
+    } // 停止 loading
 
 
-  spinner.stop(); // 判断输出结果
+    spinner.stop(); // 判断输出结果
 
-  if (outResult) {
-    if (uploadOut.includes('error')) {
-      console.error(uploadOut.red);
-    } else {
-      console.log(uploadOut.green);
-    }
-  } // 上传完毕钩子
+    if (outResult) {
+      if (uploadOut.includes('error')) {
+        console.error(uploadOut.red);
+      } else {
+        console.log(uploadOut.green);
+      }
+    } // 上传完毕钩子
 
 
-  await (0, _utils.asyncFn)(done, uploadOut);
-})();
+    await (0, _utils.asyncFn)(done, uploadOut);
+  })();
+} catch (e) {
+  console.error(e);
+}
