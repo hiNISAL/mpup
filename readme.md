@@ -169,3 +169,10 @@ projects.forEach((project) => {
   execSync(`mpup --config=配置路径 --project=${project}`);
 });
 ```
+
+## TODO
+
+[ ] 命令行中显示登入二维码
+[ ] 生成预览二维码
+[ ] 启动开发者工具
+[ ] 关闭开发者工具
