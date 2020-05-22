@@ -8,6 +8,8 @@ exports.default = void 0;
 var _default = (toolPath = '', projectPath = '') => {
   return `module.exports = {
   /** 微信开发者工具安装路径 */
+  /** MacOS默认安装路径： /Applications/wechatwebdevtools.app/Contents/MacOS */
+  /** windows默认安装路径： C:\\Program Files (x86)\\Tencent\\微信web开发者工具 */
   mpToolPath: '${toolPath}',
 
   /** 项目路径 */
