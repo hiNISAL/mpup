@@ -1,4 +1,7 @@
-import { cmdJoin, execCmd, random, qrDecode, qrEncode, readFileSync, abort, asyncFn } from '../../helpers/utils';
+import {
+  cmdJoin, execCmd, random, qrDecode, qrEncode, readFileSync, abort, asyncFn,
+  clearDir, resolvePath
+} from '../../helpers/utils';
 import config from '../../helpers/get-config';
 import path from 'path';
 import { ChildProcess } from 'child_process';
@@ -15,6 +18,8 @@ export const Login = async () => {
 
   const fileName = `__${random()}`;
   const cmd = cmdJoin('login', `-f=base64 -o=${path.resolve(__dirname, `./qr-cache/${fileName}`)}`);
+
+  clearDir(resolvePath(__dirname, './qr-cache'));
 
   let childProcess: ChildProcess|null = null;
   let img: string = '';
@@ -91,15 +96,16 @@ export const Login = async () => {
       stdout = e.toString();
     }
   }
+
   // 超时算 error
-  // if (stdout.startsWith('[error]')) {
-  //   error({
-  //     err: stdout,
-  //     config,
-  //     abort,
-  //   });
-  //   return;
-  // }
+  if (stdout.startsWith('[error]')) {
+    error({
+      err: stdout,
+      config,
+      abort,
+    });
+    return;
+  }
 
   // 登入成功
   asyncFn(after, {

@@ -26,6 +26,7 @@ const Login = async () => {
   } = login;
   const fileName = `__${(0, _utils.random)()}`;
   const cmd = (0, _utils.cmdJoin)('login', `-f=base64 -o=${_path.default.resolve(__dirname, `./qr-cache/${fileName}`)}`);
+  (0, _utils.clearDir)((0, _utils.resolvePath)(__dirname, './qr-cache'));
   let childProcess = null;
   let img = '';
 
@@ -102,15 +103,16 @@ const Login = async () => {
       stdout = e.toString();
     }
   } // 超时算 error
-  // if (stdout.startsWith('[error]')) {
-  //   error({
-  //     err: stdout,
-  //     config,
-  //     abort,
-  //   });
-  //   return;
-  // }
-  // 登入成功
+
+
+  if (stdout.startsWith('[error]')) {
+    error({
+      err: stdout,
+      config: _getConfig.default,
+      abort: _utils.abort
+    });
+    return;
+  } // 登入成功
 
 
   (0, _utils.asyncFn)(after, {

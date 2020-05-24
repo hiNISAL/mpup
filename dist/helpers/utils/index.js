@@ -3,11 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.abort = exports.scanf = exports.asyncFn = exports.execCmd = exports.relativePath = exports.writeFileSync = exports.readFileSync = exports.resolvePath = exports.isAsyncFn = exports.random = exports.cmdJoin = exports.cliPrefix = exports.isMacOS = exports.qrDecode = exports.qrEncode = void 0;
+exports.clearDir = exports.abort = exports.scanf = exports.asyncFn = exports.execCmd = exports.relativePath = exports.writeFileSync = exports.readFileSync = exports.resolvePath = exports.isAsyncFn = exports.random = exports.cmdJoin = exports.cliPrefix = exports.isMacOS = exports.qrDecode = exports.qrEncode = void 0;
 
 var _path = _interopRequireDefault(require("path"));
 
-var _fs = _interopRequireDefault(require("fs"));
+var _fs = _interopRequireWildcard(require("fs"));
 
 var _child_process = require("child_process");
 
@@ -18,6 +18,10 @@ var _qrcodeReader = _interopRequireDefault(require("qrcode-reader"));
 var _jimp = require("jimp");
 
 var _qrcodeTerminal = _interopRequireDefault(require("qrcode-terminal"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -180,3 +184,12 @@ const abort = (text = '') => {
 };
 
 exports.abort = abort;
+
+const clearDir = dir => {
+  const files = (0, _fs.readdirSync)(dir).map(item => resolvePath(dir, `./${item}`));
+  files.forEach(file => {
+    (0, _fs.unlinkSync)(file);
+  });
+};
+
+exports.clearDir = clearDir;

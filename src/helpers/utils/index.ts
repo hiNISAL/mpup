@@ -1,5 +1,5 @@
 import path from 'path';
-import fs from 'fs';
+import fs, { readdirSync, unlinkSync } from 'fs';
 import { exec } from 'child_process';
 import inquirer from 'inquirer';
 import QR from 'qrcode-reader';
@@ -130,4 +130,12 @@ export const scanf = async(tip: string) => {
 export const abort = (text = '') => {
   console.log(text);
   process.exit();
+};
+
+export const clearDir = (dir: string) => {
+  const files = readdirSync(dir).map(item => resolvePath(dir, `./${item}`));
+
+  files.forEach((file) => {
+    unlinkSync(file);
+  });
 };
