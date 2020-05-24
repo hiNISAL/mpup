@@ -1,4 +1,4 @@
-import { iCommand, iConfig } from '../common.d';
+import { iCommand, iConfig, iLogin } from '../common.d';
 
 export default class DefaultConfig implements iConfig {
   // 微信开发者工具安装路径
@@ -61,9 +61,10 @@ export default class DefaultConfig implements iConfig {
   useServerUpload: boolean = false;
 
   // 登入相关配置
-  login = {
-    after() {},
-    qrGot() {},
-    error() {},
-  };
+  login: iLogin = {
+    before() {},
+    qrGot({ terminal }) { console.log(terminal) },
+    after({ stdout }) { console.log(stdout) },
+    error({ err }) { console.log(err) },
+  }
 };

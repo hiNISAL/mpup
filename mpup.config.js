@@ -69,6 +69,8 @@ module.exports = {
 
   /** 登入相关配置 */
   login: {
+    before() {
+    },
     qrGot({ terminal, base64, qrContent }) {
       console.log(terminal);
     },

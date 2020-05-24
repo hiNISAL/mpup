@@ -47,6 +47,14 @@ if (project) {
   customConfig.projectPath = project;
 }
 
-const exportConfig = Object.assign(new _default2.default(), customConfig);
+const defaultConfig = new _default2.default();
+const {
+  login
+} = customConfig;
+const {
+  login: defaultLoginConfig
+} = defaultConfig;
+const exportConfig = Object.assign(defaultConfig, customConfig);
+exportConfig.login = Object.assign(defaultLoginConfig, login);
 var _default = exportConfig;
 exports.default = _default;

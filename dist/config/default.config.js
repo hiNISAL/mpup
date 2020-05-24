@@ -41,11 +41,25 @@ class DefaultConfig {
     this.useServerUpload = false; // 登入相关配置
 
     this.login = {
-      after() {},
+      before() {},
 
-      qrGot() {},
+      qrGot({
+        terminal
+      }) {
+        console.log(terminal);
+      },
 
-      error() {}
+      after({
+        stdout
+      }) {
+        console.log(stdout);
+      },
+
+      error({
+        err
+      }) {
+        console.log(err);
+      }
 
     };
   } // 出错

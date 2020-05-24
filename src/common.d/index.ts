@@ -78,6 +78,16 @@ export interface iConfig {
 }
 
 export interface iLogin {
+  before?: (
+    args: {
+      /** 登入命令 */
+      cmd: string;
+      /** 配置文件 */
+      config: iConfig;
+      /** 中断方法 */
+      abort: Function;
+    },
+  ) => void|boolean,
   // 获得登入二维码后
   qrGot?: (qrInfo: {
     /** 字符串形式的二维码，可以直接在控制台输出 */

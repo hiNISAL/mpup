@@ -11,6 +11,7 @@ export const Login = async () => {
   const { login = {} }= config;
 
   const {
+    before = () => {},
     qrGot = () => {},
     after = () => {},
     error = () => {},
@@ -27,9 +28,21 @@ export const Login = async () => {
   const afterLoginQRSave = async () => {
     const base64 = img.replace(/^data:image\/\w+;base64,/, '');
     const buffer = Buffer.from(base64, 'base64');
-    const res: string = await qrDecode(buffer);
 
-    const qrcode: string = await qrEncode(res);
+    let res = '';
+    let qrcode = '';
+    try {
+      res = await qrDecode(buffer);
+
+      qrcode = await qrEncode(res);
+    } catch (e) {
+      error({
+        abort,
+        config,
+        err: '[error] login failed Error: 解析登入二维码失败，请重试 [code=-223]',
+      });
+      return;
+    }
  
     try {
       await asyncFn(qrGot, {
@@ -52,6 +65,12 @@ export const Login = async () => {
   let stdout = '';
 
   try {
+    await asyncFn(before, {
+      cmd,
+      config,
+      abort,
+    });
+
     stdout = await execCmd(cmd, config.mpToolPath!, (pro) => {
       childProcess = pro;
   
@@ -64,7 +83,7 @@ export const Login = async () => {
 
           error({
             abort,
-            err: '[error] login failed Error: 获取登入二维码失败',
+            err: '[error] login failed Error: 获取登入二维码失败 [code=-222]',
             config,
           });
 

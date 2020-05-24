@@ -20,6 +20,7 @@ const Login = async () => {
     login = {}
   } = _getConfig.default;
   const {
+    before = () => {},
     qrGot = () => {},
     after = () => {},
     error = () => {}
@@ -33,8 +34,20 @@ const Login = async () => {
   const afterLoginQRSave = async () => {
     const base64 = img.replace(/^data:image\/\w+;base64,/, '');
     const buffer = Buffer.from(base64, 'base64');
-    const res = await (0, _utils.qrDecode)(buffer);
-    const qrcode = await (0, _utils.qrEncode)(res);
+    let res = '';
+    let qrcode = '';
+
+    try {
+      res = await (0, _utils.qrDecode)(buffer);
+      qrcode = await (0, _utils.qrEncode)(res);
+    } catch (e) {
+      error({
+        abort: _utils.abort,
+        config: _getConfig.default,
+        err: '[error] login failed Error: 解析登入二维码失败，请重试 [code=-223]'
+      });
+      return;
+    }
 
     try {
       await (0, _utils.asyncFn)(qrGot, {
@@ -57,6 +70,11 @@ const Login = async () => {
   let stdout = '';
 
   try {
+    await (0, _utils.asyncFn)(before, {
+      cmd,
+      config: _getConfig.default,
+      abort: _utils.abort
+    });
     stdout = await (0, _utils.execCmd)(cmd, _getConfig.default.mpToolPath, pro => {
       childProcess = pro;
       let times = 100;
@@ -70,7 +88,7 @@ const Login = async () => {
           (_childProcess = childProcess) === null || _childProcess === void 0 ? void 0 : _childProcess.kill();
           error({
             abort: _utils.abort,
-            err: '[error] login failed Error: 获取登入二维码失败',
+            err: '[error] login failed Error: 获取登入二维码失败 [code=-222]',
             config: _getConfig.default
           });
           return;

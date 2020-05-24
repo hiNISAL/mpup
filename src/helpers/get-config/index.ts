@@ -38,6 +38,13 @@ if (project) {
   customConfig.projectPath = project;
 }
 
-const exportConfig: iConfig = Object.assign(new DefaultConfig(), customConfig);
+const defaultConfig = new DefaultConfig();
+
+const { login } = customConfig;
+const { login: defaultLoginConfig } = defaultConfig;
+
+const exportConfig: iConfig = Object.assign(defaultConfig, customConfig);
+
+exportConfig.login = Object.assign(defaultLoginConfig, login);
 
 export default exportConfig;

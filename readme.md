@@ -50,6 +50,67 @@ npx mpup --project=项目路径 --mptool=小程序命令行工具所在路径 --
 npx mpup init
 ```
 
+### 登入开发者工具
+
+```bash
+npx mpup login --config=./mpup.config.js
+
+npx mpup login --mptool=小程序命令行工具所在路径
+```
+
+如果不再配置文件中提供配置项，默认就是将二维码和登入结果输出。
+
+提供 `login` 配置项：
+
+```js
+module.exports = {
+  // ...
+
+  login: {
+    before({
+      /** 登入的命令 */
+      cmd,
+      /** 中断方法 */
+      abort,
+      /** 配置文件 */
+      config,
+    }) {},
+    qrGot({
+      /** 可以直接在控制台输出的二维码 */
+      terminal,
+      /** 二维码图片的base64 */
+      base64,
+      /** 二维码内容，可以自己接工具生成二维码 */
+      qrContent,
+    }) {
+      console.log(terminal);
+    },
+    after({
+      /** 中断方法 */
+      abort,
+      /** 配置文件 */
+      config,
+      /** 子进程输出 */
+      stdout,
+    }) {
+      console.log(stdout);
+    },
+    error({
+      /** 中断方法 */
+      abort,
+      /** 配置文件 */
+      config,
+      /** 错误内容 */
+      err,
+    }) {
+      console.log(err);
+    },
+  },
+
+  // ...
+};
+```
+
 ### 配置详情
 
 windows 在提供路径相关配置的时候，需要对 \ 做一次转义。
@@ -121,6 +182,18 @@ module.exports = {
 
   /** 自动输出结果 */
   outResult: true,
+
+  /** 登入相关配置 */
+  login: {
+    /** 执行登入前 */
+    before({ cmd, config, abort }) {},
+    /** 获取到登入二维码后 */
+    qrGot({ terminal, base64, qrContent, abort, config }) {},
+    /** 开始登入 */
+    after({ abort, config, stdout }) {},
+    /** 出错了 */
+    error({ abort, config, err }) {},
+  },
 };
 ```
 
@@ -170,12 +243,43 @@ projects.forEach((project) => {
 });
 ```
 
+## gitignore
+
+每个开发者的项目路径、工具路径可能不一样，所以团队协作可能会发生配置冲突的问题。
+
+可以再独立一个配置文件，专门用来放不同的配置项。
+
+```js
+// ./mpup.path.config.js.bak
+module.exports = {
+  mpToolPath: '小程序工具路径',
+  projectPath: '项目路径',
+};
+```
+
+这个文件放在仓库中，同时 ignore `mpup.path.config.js`，在使用的时候将 `./mpup.path.config.js.bak` 复制一份，然后将文件的 `.bak` 后缀去除。
+
+随后给 `mpup.config.js` 使用。
+
+```js
+// ./mpup.config.js
+const { mpToolPath, projectPath } = require('./mpup.path.config.js');
+
+module.exports = {
+ /** 微信开发者工具安装路径 */
+  mpToolPath,
+
+  /** 项目路径 */
+  projectPath,
+
+  // ...
+  // 其他配置
+};
+```
+
 ## TODO
 
-[ ] 命令行中显示登入二维码
-
-[ ] 生成预览二维码
-
-[ ] 启动开发者工具
-
-[ ] 关闭开发者工具
+- [x] 命令行中显示登入二维码
+- [ ] 生成预览二维码
+- [ ] 启动开发者工具
+- [ ] 关闭开发者工具
