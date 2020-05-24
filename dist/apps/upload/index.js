@@ -38,12 +38,6 @@ const Upload = async () => {
     desc,
     ver
   } = _index.default;
-
-  const abort = (text = '') => {
-    console.log(text);
-    process.exit();
-  };
-
   const spinner = (0, _ora.default)(uploadingText);
 
   try {
@@ -72,7 +66,7 @@ const Upload = async () => {
 
     await (0, _utils.asyncFn)(beforeExecAllCmd, {
       config: _index.default,
-      abort
+      abort: _utils.abort
     }); // 执行所有命令
 
     for (let i = 0, len = commands.length; i < len; i++) {
@@ -90,7 +84,7 @@ const Upload = async () => {
         await (0, _utils.asyncFn)(before, {
           config: _index.default,
           command: commands[i],
-          abort
+          abort: _utils.abort
         });
         let stdout = undefined;
 
@@ -100,12 +94,12 @@ const Upload = async () => {
           } catch (e) {
             await (0, _utils.asyncFn)(error), {
               e,
-              abort,
+              abort: _utils.abort,
               command: commands[i]
             };
             await (0, _utils.asyncFn)(globalError, {
               e,
-              abort,
+              abort: _utils.abort,
               errorTarget: 'cmd',
               command: commands[i]
             });
@@ -120,12 +114,12 @@ const Upload = async () => {
         await (0, _utils.asyncFn)(after, {
           stdout,
           command: commands[i],
-          abort
+          abort: _utils.abort
         });
       } catch (e) {
         (0, _utils.asyncFn)(globalError, {
           e,
-          abort
+          abort: _utils.abort
         });
         throw Error(e);
       }
@@ -133,14 +127,14 @@ const Upload = async () => {
 
     await (0, _utils.asyncFn)(afterExecAllCmd, {
       config: _index.default,
-      abort
+      abort: _utils.abort
     });
-    const uploadCmd = `${(0, _utils.isMacOS)() ? './' : ''}cli${(0, _utils.isMacOS)() ? '' : '.bat'} upload --project=${projectPath} --version=${ver} --desc=${desc}`; // 上传前
+    const uploadCmd = (0, _utils.cmdJoin)('upload', `--project=${projectPath} --version=${ver} --desc=${desc}`); // 上传前
 
     await (0, _utils.asyncFn)(beforeUpload, {
       uploadCmd,
       config: _index.default,
-      abort
+      abort: _utils.abort
     }); // loading
 
     spinner.start(); // 执行上传
@@ -154,7 +148,7 @@ const Upload = async () => {
       spinner.stop();
       await (0, _utils.asyncFn)(globalError, {
         e,
-        abort
+        abort: _utils.abort
       });
       console.log('检查小程序路径、项目路径是否正确'.red);
       return;
@@ -176,13 +170,13 @@ const Upload = async () => {
     await (0, _utils.asyncFn)(done, {
       stdout: uploadOut,
       config: _index.default,
-      abort
+      abort: _utils.abort
     });
   } catch (e) {
     console.error(e);
     (0, _utils.asyncFn)(globalError, {
       e,
-      abort
+      abort: _utils.abort
     });
     spinner.stop();
   }

@@ -1,6 +1,6 @@
 import config from '../../helpers/get-config/index';
 import { MissingOption } from '../../throw/index';
-import { isMacOS, asyncFn, execCmd, scanf } from '../../helpers/utils';
+import { asyncFn, execCmd, scanf, cmdJoin, abort } from '../../helpers/utils';
 import ora from 'ora';
 import 'colors';
 
@@ -26,11 +26,6 @@ export const Upload = async () => {
     desc,
     ver,
   } = config;
-
-  const abort = (text = '') => {
-    console.log(text);
-    process.exit();
-  };
 
   const spinner = ora(uploadingText);
 
@@ -125,8 +120,8 @@ export const Upload = async () => {
       abort,
     });
   
-    const uploadCmd = `${isMacOS() ? './' : ''}cli${isMacOS() ? '' : '.bat'} upload --project=${projectPath} --version=${ver} --desc=${desc}`;
-  
+    const uploadCmd = cmdJoin('upload', `--project=${projectPath} --version=${ver} --desc=${desc}`);
+
     // 上传前
     await asyncFn(beforeUpload!, {
       uploadCmd,

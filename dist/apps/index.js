@@ -9,13 +9,16 @@ var _Upload = require("./Upload");
 
 var _Init = require("./Init");
 
+var _Login = require("./Login");
+
 var _args = _interopRequireDefault(require("../args"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const MAP = {
   UPLOAD: _Upload.Upload,
-  INIT: _Init.Init
+  INIT: _Init.Init,
+  LOGIN: _Login.Login
 };
 
 const getApp = app => {

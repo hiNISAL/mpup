@@ -59,4 +59,11 @@ export default class DefaultConfig implements iConfig {
 
   // 是否启用服务端上传
   useServerUpload: boolean = false;
+
+  // 登入相关配置
+  login = {
+    after() {},
+    qrGot() {},
+    error() {},
+  };
 };

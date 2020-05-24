@@ -66,4 +66,19 @@ module.exports = {
 
   /** 自动输出结果 */
   // outResult: true,
+
+  /** 登入相关配置 */
+  login: {
+    qrGot({ terminal, base64, qrContent }) {
+      console.log(terminal);
+    },
+
+    after({ stdout }) {
+      console.log(stdout);
+    },
+
+    error({ err }) {
+      console.log(err);
+    }
+  },
 };

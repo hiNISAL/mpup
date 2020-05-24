@@ -73,4 +73,40 @@ export interface iConfig {
 
   /** 是否启用服务端上传 */
   useServerUpload?: boolean;
+
+  login?: iLogin;
+}
+
+export interface iLogin {
+  // 获得登入二维码后
+  qrGot?: (qrInfo: {
+    /** 字符串形式的二维码，可以直接在控制台输出 */
+    terminal: string;
+    /** 二维码图片的base64形式 */
+    base64: string;
+    /** 二维码内容，可以自己生成二维码 */
+    qrContent: string;
+    /** 中断方法 */
+    abort: Function;
+    /** 配置文件 */
+    config: iConfig;
+  }) => boolean|void;
+
+  after?: (arg: {
+    /** 中断方法 */
+    abort: Function;
+    /** 配置文件 */
+    config: iConfig;
+    /** 子进程输出 */
+    stdout: string;
+  }) => boolean|void,
+
+  error?: (arg: {
+    /** 中断方法 */
+    abort: Function,
+    /** 配置文件 */
+    config: iConfig;
+    /** 错误内容 */
+    err: any;
+  }) => boolean|void;
 }

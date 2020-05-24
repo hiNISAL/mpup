@@ -38,7 +38,16 @@ class DefaultConfig {
 
     this.remote = ''; // 是否启用服务端上传
 
-    this.useServerUpload = false;
+    this.useServerUpload = false; // 登入相关配置
+
+    this.login = {
+      after() {},
+
+      qrGot() {},
+
+      error() {}
+
+    };
   } // 出错
 
 

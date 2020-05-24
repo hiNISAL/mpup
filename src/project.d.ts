@@ -1,1 +1,2 @@
-declare module 'my_private_module';
+declare module 'qrcode-reader';
+declare module 'qrcode-terminal';

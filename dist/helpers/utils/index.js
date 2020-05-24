@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.scanf = exports.asyncFn = exports.execCmd = exports.relativePath = exports.writeFileSync = exports.readFileSync = exports.resolvePath = exports.isAsyncFn = exports.isMacOS = void 0;
+exports.abort = exports.scanf = exports.asyncFn = exports.execCmd = exports.relativePath = exports.writeFileSync = exports.readFileSync = exports.resolvePath = exports.isAsyncFn = exports.random = exports.cmdJoin = exports.cliPrefix = exports.isMacOS = exports.qrDecode = exports.qrEncode = void 0;
 
 var _path = _interopRequireDefault(require("path"));
 
@@ -13,13 +13,79 @@ var _child_process = require("child_process");
 
 var _inquirer = _interopRequireDefault(require("inquirer"));
 
+var _qrcodeReader = _interopRequireDefault(require("qrcode-reader"));
+
+var _jimp = require("jimp");
+
+var _qrcodeTerminal = _interopRequireDefault(require("qrcode-terminal"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const qrEncode = content => {
+  return new Promise((resolve, reject) => {
+    _qrcodeTerminal.default.generate(content, {
+      small: true
+    }, function (qrcode) {
+      resolve(qrcode);
+    });
+  });
+};
+
+exports.qrEncode = qrEncode;
+
+const qrDecode = imgBuffer => {
+  return new Promise((resolve, reject) => {
+    const decodeQR = new _qrcodeReader.default();
+
+    decodeQR.callback = function (err, result) {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!result) {
+        resolve('');
+      } else {
+        resolve(result.result);
+      }
+    };
+
+    (0, _jimp.read)(imgBuffer, (err, image) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      decodeQR.decode(image.bitmap);
+    });
+  });
+};
+
+exports.qrDecode = qrDecode;
 
 const isMacOS = () => {
   return !/^win/.test(process.platform);
 };
 
 exports.isMacOS = isMacOS;
+
+const cliPrefix = () => {
+  return `${isMacOS() ? './' : ''}cli${isMacOS() ? '' : '.bat'} `;
+};
+
+exports.cliPrefix = cliPrefix;
+
+const cmdJoin = (...cli) => {
+  return `${cliPrefix()}${cli.join(' ')}`;
+};
+
+exports.cmdJoin = cmdJoin;
+
+const random = () => {
+  return Math.random().toString(16).substring(2);
+};
+
+exports.random = random;
 
 const isAsyncFn = fn => {
   return Object.prototype.toString.call(fn) === '[object AsyncFunction]';
@@ -51,10 +117,10 @@ const relativePath = (p1, p2) => {
 
 exports.relativePath = relativePath;
 
-const execCmd = (cmd, path) => {
+const execCmd = (cmd, path, fn = process => {}) => {
   return new Promise((resolve, reject) => {
     try {
-      (0, _child_process.exec)(cmd, {
+      const process = (0, _child_process.exec)(cmd, {
         cwd: path
       }, (err, stdout, stderr) => {
         if (stdout) {
@@ -64,6 +130,7 @@ const execCmd = (cmd, path) => {
 
         reject(err || stderr);
       });
+      fn(process);
     } catch (e) {
       reject(e);
     }
@@ -106,3 +173,10 @@ const scanf = async tip => {
 };
 
 exports.scanf = scanf;
+
+const abort = (text = '') => {
+  console.log(text);
+  process.exit();
+};
+
+exports.abort = abort;

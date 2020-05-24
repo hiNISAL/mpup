@@ -1,5 +1,6 @@
 import { Upload } from './Upload';
 import { Init } from './Init';
+import { Login } from './Login';
 import argv from '../args';
 
 type APPS = 'UPLOAD'|'INIT';
@@ -7,6 +8,7 @@ type APPS = 'UPLOAD'|'INIT';
 const MAP: any = {
   UPLOAD: Upload,
   INIT: Init,
+  LOGIN: Login,
 };
 
 const getApp = (app: APPS) => {
