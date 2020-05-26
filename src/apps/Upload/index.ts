@@ -165,6 +165,7 @@ export const Upload = async () => {
       stdout: uploadOut,
       config,
       abort,
+      cmd: uploadCmd,
     });
   } catch (e) {
     console.error(e);

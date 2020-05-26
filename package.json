@@ -1,6 +1,6 @@
 {
   "name": "mpup",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "description": "微信小程序代码上传辅助工具",
   "main": "dist/index.js",
   "scripts": {
